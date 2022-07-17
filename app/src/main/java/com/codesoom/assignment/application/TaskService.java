@@ -34,10 +34,15 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task source) {
-        Task task = getTask(id);
-        task.setTitle(source.getTitle());
+        return tasks.stream()
+                .filter(task -> task.getId().equals(id))
+                .map(task -> {
+                                task.setTitle(source.getTitle());
+                                return task;
+                            })
+                .findFirst()
+                .orElseThrow(() -> new TaskNotFoundException(id));
 
-        return task;
     }
 
     public Task deleteTask(Long id) {
